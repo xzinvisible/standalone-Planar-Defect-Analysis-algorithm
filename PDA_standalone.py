@@ -11,9 +11,12 @@ from time import time
 import os
 os.environ["OVITO_THREAD_COUNT"] = "1"
 
-
+# input & output files
 fileinput = 'test.xyz'
 fileoutput = 'pda.txt'
+
+# number of processes
+cores = 24 
 
 pipeline = import_file(fileinput)   
 pipeline.modifiers.append(CommonNeighborAnalysisModifier())
@@ -91,7 +94,7 @@ if __name__ == '__main__':
     print('step    other   FCC     ISF     HCP     ESF     TB      BCC\n')
     frame = range(pipeline.source.num_frames)
 
-    with mp.Pool(24) as pool:
+    with mp.Pool(cores) as pool:
         PDAList = list(pool.map(PDAcount,frame))
 
     t_end = time()
